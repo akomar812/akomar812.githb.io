@@ -9,7 +9,7 @@ function CLI(props) {
 
   const cmds = {
     'help': 'Print CLI usage',
-    'resume': 'Resume view (or call with "-d" for direct file download)',
+    'resume': 'Resume view (or add "-d" for direct file download)',
     'linkedin': 'LinkedIn profile',
     'github': 'Github repos'
   };
@@ -62,9 +62,7 @@ function CLI(props) {
     help.push(`    known issues/pending features`);
     help.push(`    -----------------------------`);
     help.push(`    completed resume view`);
-    help.push(`    visual indication that something happened on click of email copy button on resume view`);
-    help.push(`    QR code link to webpage in resume`);
-    help.push(`    More stuff, easter eggs/fun commands`);
+    help.push(`    visual indication email copied when resume view button clicked`);
     help.push(`\n`);
     return help.join('\n');
   };
