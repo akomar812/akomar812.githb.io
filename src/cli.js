@@ -63,7 +63,6 @@ function CLI(props) {
     help.push(`    -----------------------------`);
     help.push(`    completed resume view`);
     help.push(`    visual indication that something happened on click of email copy button on resume view`);
-    help.push(`    Optimize for mobile`);
     help.push(`    QR code link to webpage in resume`);
     help.push(`\n`);
     return help.join('\n');
