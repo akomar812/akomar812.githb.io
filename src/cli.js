@@ -64,6 +64,7 @@ function CLI(props) {
     help.push(`    completed resume view`);
     help.push(`    visual indication that something happened on click of email copy button on resume view`);
     help.push(`    QR code link to webpage in resume`);
+    help.push(`    More stuff, easter eggs/fun commands`);
     help.push(`\n`);
     return help.join('\n');
   };
