@@ -1,6 +1,6 @@
 * {
   color: white;
-  font-size: .87em;
+  font-size: .85em;
 }
 
 @media screen and (min-width: 480px) {
@@ -28,7 +28,7 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   overflow-x: hidden;
 }
 
