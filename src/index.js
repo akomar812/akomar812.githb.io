@@ -4,8 +4,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faLaptopCode } from '@fortawesome/free-solid-svg-icons'
-library.add(faLaptopCode);
+import { faLaptopCode, faFileDownload, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import { faLinkedinIn, faGithub } from '@fortawesome/free-brands-svg-icons'
+library.add(faLaptopCode, faFileDownload, faLinkedinIn, faGithub, faEnvelope);
 
 ReactDOM.render(
   <React.StrictMode>
