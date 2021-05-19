@@ -8,8 +8,6 @@ function App() {
   const [history, setHistory] = useState([]);
   let display;
 
-  useEffect(() => console.log('history:', history), [history]);
-
   const showCLI = () => {
     setView('cli');
     window.history.replaceState(null, 'Main', '/');

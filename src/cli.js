@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { resume, linkedin, github } from './constants.js';
+import { resume, linkedin, github, email } from './constants.js';
 import './App.css';
 
 function CLI(props) {
@@ -25,12 +25,12 @@ function CLI(props) {
   const getBanner = () => {
     const banner = [
     `
-       ___            _                     _   __                             _____  _     _____ 
-      / _ \\          | |                   | | / /                            /  __ \\| |   |_   _|
-     / /_\\ \\_ __   __| |_ __ _____      __ | |/ /  ___  _ __ ___   __ _ _ __  | /  / | |     | |  
-     |  _  | '_ \\ / _\` | '__/ _ \\ \\ /\\ / / |    \\ / _ \\| '_ \` _ \\ / _\` | \'__| | |    | |     | |  
-     | | | | | | | (_| | | |  __/\\ V  V /  | |\\  \\ (_) | | | | | | (_| | |    | \\__/\\| |_____| |_ 
-     \\_| |_/_| |_|\\__,_|_|  \\___| \\_/\\_/   \\_| \\_/\\___/|_| |_| |_|\\__,_|_|     \\____/\\_____/\\___/
+       ___            _                     _   __
+      / _ \\          | |                   | | / /
+     / /_\\ \\_ __   __| |_ __ _____      __ | |/ /  ___  _ __ ___   __ _ _ __
+     |  _  | '_ \\ / _\` | '__/ _ \\ \\ /\\ / / |    \\ / _ \\| '_ \` _ \\ / _\` | \'__|
+     | | | | | | | (_| | | |  __/\\ V  V /  | |\\  \\ (_) | | | | | | (_| | |
+     \\_| |_/_| |_|\\__,_|_|  \\___| \\_/\\_/   \\_| \\_/\\___/|_| |_| |_|\\__,_|_|
      `,
      getHelp()
     ];
@@ -39,7 +39,7 @@ function CLI(props) {
   };
 
   const getHelp = () => {
-    const help = [`    contact: akomar812@gmail.com`, `\n`,
+    const help = [`    contact: ${email}`, `\n`,
                   `    cmd              description`,
                   `    ---              -----------`];
 
@@ -142,8 +142,8 @@ function CLI(props) {
 
         break;
 
-      default:
-        console.log('# unrecognized keycode:', e.keyCode);
+      // default:
+      //   console.log('# unrecognized keycode:', e.keyCode);
     }
   };
 

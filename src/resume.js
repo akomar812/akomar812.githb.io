@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Experience } from './resume.components.js';
-import { resume, linkedin, github } from './constants.js';
+import { resume, linkedin, github, email } from './constants.js';
 
 function Resume(props) {
   const handleEmailClick = () => {
-    updateClipboard('akomar812@gmail.com');
+    updateClipboard(email);
   }
 
   const updateClipboard = (newClip) => {
