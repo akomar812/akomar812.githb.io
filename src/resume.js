@@ -84,6 +84,7 @@ function Resume(props) {
               </Experience>
             </div>
             <div id="resume-education">
+              <div style={{"fontSize":"2em","fontWeight":"bold"}}>Education</div>
               <div>UC Santa Cruz</div>
               <div>Bachelors of Arts Computational Mathematics, 2012</div>
             </div>

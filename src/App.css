@@ -73,7 +73,7 @@
 #resume-header {
   display: flex;
   flex-direction: row;
-  height: 25em;
+  height: 20em;
   justify-content: space-between;
 }
 
@@ -124,7 +124,7 @@
 }
 
 #resume-body > div {
-  margin: 1em 0;
+  margin: 1em 0 0;
 }
 
 #resume-skills {
@@ -151,7 +151,7 @@
 }
 
 .experience {
-  margin: 1em 0;
+  margin: 0 0 1em;
 }
 
 .experience .experience-title {
@@ -163,11 +163,11 @@
   padding: 0;
 }
 
-.experience ul > lh{
-  font-weight: bold;
-}
-
 .experience ul > li{
   list-style-type: none;
-  margin: 2em 0;
+  margin: 0 0 2em;
+}
+
+.experience ul > li:last-child{
+  margin: 0;
 }
