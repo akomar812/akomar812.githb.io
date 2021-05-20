@@ -73,7 +73,7 @@
 #resume-header {
   display: flex;
   flex-direction: row;
-  height: 10em;
+  height: 25em;
   justify-content: space-between;
 }
 
@@ -120,6 +120,7 @@
   flex-direction: column;
   overflow-y: scroll;
   background-color: #122E22;
+  padding: 0 2em;
 }
 
 #resume-body > div {
@@ -151,4 +152,22 @@
 
 .experience {
   margin: 1em 0;
+}
+
+.experience .experience-title {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.experience ul {
+  padding: 0;
+}
+
+.experience ul > lh{
+  font-weight: bold;
+}
+
+.experience ul > li{
+  list-style-type: none;
+  margin: 2em 0;
 }
