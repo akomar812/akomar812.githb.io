@@ -29,7 +29,7 @@
   justify-content: center;
   height: 100vh;
   width: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 #cli-wrapper {
@@ -73,7 +73,7 @@
 #resume-header {
   display: flex;
   flex-direction: row;
-  height: 11em;
+  height: 10em;
   justify-content: space-between;
 }
 
@@ -89,8 +89,8 @@
   font-size: 100%;
 }
 
-.resume-email-clicked {
-  color: #80b696 !important;
+#email:active {
+  background-color: #80b696;
 }
 
 #resume-header-controls *:hover {
@@ -118,6 +118,8 @@
 #resume-body {
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+  background-color: #122E22;
 }
 
 #resume-body > div {

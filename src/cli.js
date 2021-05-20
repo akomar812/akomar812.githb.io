@@ -58,6 +58,7 @@ function CLI(props) {
     help.push(`    general`);
     help.push(`    -------`);
     help.push(`    enter an empty command to clear screen`);
+    help.push(`    add "-l" to linkedin, or github cmd to retrieve link w/o opening in new tab`);
     help.push(``);
     help.push(`    known issues/pending features`);
     help.push(`    -----------------------------`);
@@ -76,7 +77,7 @@ function CLI(props) {
       return getHelp();
     }
 
-    if (cmd.indexOf('resume') >= 0) {
+    if (cmd.indexOf('resume') === 0) {
       if (cmd.indexOf('-d') >= 0) {
         window.open(resume, '_blank');
         return resume;
@@ -87,13 +88,19 @@ function CLI(props) {
       return 'Opening...';
     }
 
-    if (cmd === 'linkedin') {
-      window.open(linkedin, '_blank');
+    if (cmd.indexOf('linkedin') === 0) {
+      if (cmd.indexOf('-l') < 0) {
+        window.open(linkedin, '_blank');
+      }
+      
       return linkedin;
     }
 
-    if (cmd === 'github') {
-      window.open(github, '_blank');
+    if (cmd.indexOf('github') === 0) {
+      if (cmd.indexOf('-l') < 0) {
+        window.open(github, '_blank');
+      }
+
       return github;
     }
 

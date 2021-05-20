@@ -1,21 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Experience } from './resume.components.js';
-import { resume, linkedin, github, email } from './constants.js';
+import { Experience, Controls } from './resume.components.js';
 
 function Resume(props) {
-  const handleEmailClick = () => {
-    updateClipboard(email);
-  }
-
-  const updateClipboard = (newClip) => {
-    navigator.clipboard.writeText(newClip)
-    .then(() => {
-      /* clipboard successfully set */
-    }, () => {
-      /* clipboard write failed */
-    });
-  };
-  
   return (
     <div className="container">
       <div id="resume-wrapper">
@@ -28,30 +13,43 @@ function Resume(props) {
           </header>
           <div id="resume-body">
             <div id="intro">
-              This page is under active development, check back soon for further updates. In the mean time
-              my resume is available for download as a file in the top right corner
+              <p>This page is under active development, check back soon for further updates. In the mean time
+              my resume is available for download as a file in the top right corner</p>
+
+              {/* <p>Dedicated full stack developer with 9 years of experience working in enterprise and startup environments.
+              I've built and deployed applications both on-prem and on public clouds.</p> */}
             </div>
-            <div id="resume-experience">
-              <Experience name="Datera" title="Member of Technical Staff" location="Santa Clara, CA" dates={['2/2016', '2/2021']}></Experience>
-              <Experience name="Microsoft" title="Software Engineer" location="Redmond, WA" dates={['4/2015', '10/2016']}></Experience>
-              <Experience name="Clutch" title="Software Engineer" location="Seattle, WA" dates={['9/2014', '4/2015']}></Experience>
-              <Experience name="Cisco" title="Project Manager" location="San Jose, CA" dates={['2/2012', '9/2014']}></Experience>
+            {/* <div id="resume-experience">
+              <Experience name="Datera" title="Member of Technical Staff" location="Santa Clara, CA" dates={['2/2016', '2/2021']}>
+                <ul>
+                  <lh>Role and Accomplishments</lh>
+                </ul>
+              </Experience>
+              <Experience name="Microsoft" title="Software Engineer" location="Redmond, WA" dates={['4/2015', '10/2016']}>
+                <ul>
+                  <lh>Role and Accomplishments</lh>
+                </ul>
+              </Experience>
+              <Experience name="Clutch" title="Software Engineer" location="Seattle, WA" dates={['9/2014', '4/2015']}>
+                <ul>
+                  <lh>Role and Accomplishments</lh>
+                </ul>
+              </Experience>
+              <Experience name="Cisco" title="Project Manager" location="San Jose, CA" dates={['2/2012', '9/2014']}>
+                <ul>
+                  <lh>Role and Accomplishments</lh>
+                </ul>
+              </Experience>
             </div>
             <div id="resume-education">
               <div>UC Santa Cruz</div>
               <div>Bachelors of Arts Computational Mathematics, 2012</div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div id="resume-sidebar">
-            <div id="resume-header-controls">
-              <FontAwesomeIcon title="Go to main CLI view" id="cli-view" icon="laptop-code" onClick={props.showCLI}/>
-              <FontAwesomeIcon title="Download resume" id="resume-file-download" icon="file-download" onClick={() => window.open(resume, '_blank')}/>
-              <FontAwesomeIcon title="Copy email to clipboard" id="email" icon="envelope" onClick={handleEmailClick}/>
-              <FontAwesomeIcon title="Open LinkedIn" id="linkedin" icon={["fab", "linkedin-in"]} onClick={() => window.open(linkedin, '_blank')}/>
-              <FontAwesomeIcon title="Open Github" id="github" icon={["fab", "github"]} onClick={() => window.open(github, '_blank')}/>
-            </div>
-            <div id="resume-skills">
+            <Controls showCLI={props.showCLI}></Controls>
+            {/* <div id="resume-skills">
               <div className="resume-skill">JS</div>
               <div className="resume-skill">Node.js</div>
               <div className="resume-skill">React.js</div>
@@ -65,7 +63,7 @@ function Resume(props) {
               <div className="resume-skill">C#</div>
               <div className="resume-skill">Java</div>
               <div className="resume-skill">Git</div>
-            </div>
+            </div> */}
           </div>
       </div>
     </div>

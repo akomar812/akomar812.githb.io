@@ -15,10 +15,10 @@ function App() {
 
   const showResume = () => {
     setView('resume');
-    window.history.replaceState(null, 'Resume', 'resume');
+    window.history.replaceState(null, 'Resume', '#resume');
   };
 
-  useEffect(() => window.location.pathname === '/resume' ? showResume() : showCLI(), []);
+  useEffect(() => window.location.hash === '#resume' ? showResume() : showCLI(), []);
 
   switch(view) {
     case 'cli':
