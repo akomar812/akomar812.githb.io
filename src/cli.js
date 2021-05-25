@@ -7,11 +7,13 @@ function CLI(props) {
   const [history, setHistory] = useState([]);
   const [historyCursor, setHistoryCursor] = useState();
 
+  const commonFlags = '(-c=copy url to clipboard, -o=open url in new tab)';
+
   const cmds = {
     'help': 'Print CLI usage',
-    'resume': 'Resume view (or add "-d" for direct file download)',
-    'linkedin': 'LinkedIn profile',
-    'github': 'Github repos'
+    'resume': 'Resume file download',
+    'linkedin': 'LinkedIn profile '+commonFlags,
+    'github': 'Github repos '+commonFlags
   };
 
   const focusCLIInput = () => {
@@ -58,12 +60,7 @@ function CLI(props) {
     help.push(`    general`);
     help.push(`    -------`);
     help.push(`    enter an empty command to clear screen`);
-    help.push(`    add "-l" to linkedin, or github cmd to retrieve link w/o opening in new tab`);
     help.push(``);
-    help.push(`    known issues/pending features`);
-    help.push(`    -----------------------------`);
-    help.push(`    completed resume view`);
-    help.push(`    visual indication email copied when resume view button clicked`);
     help.push(`\n`);
     return help.join('\n');
   };
@@ -78,18 +75,16 @@ function CLI(props) {
     }
 
     if (cmd.indexOf('resume') === 0) {
-      if (cmd.indexOf('-d') >= 0) {
-        window.open(resume, '_blank');
-        return resume;
-      }
-
-      window.setTimeout(() => props.showResume(), 500);
-
-      return 'Opening...';
+      window.open(resume, '_blank');
+      return resume;
     }
 
     if (cmd.indexOf('linkedin') === 0) {
-      if (cmd.indexOf('-l') < 0) {
+      if (cmd.indexOf('-c') > 0) {
+        navigator.clipboard.writeText(linkedin);
+      }
+
+      if (cmd.indexOf('-o') > 0) {
         window.open(linkedin, '_blank');
       }
       
@@ -97,14 +92,18 @@ function CLI(props) {
     }
 
     if (cmd.indexOf('github') === 0) {
-      if (cmd.indexOf('-l') < 0) {
+      if (cmd.indexOf('-c') > 0) {
+        navigator.clipboard.writeText(github);
+      }
+
+      if (cmd.indexOf('-o') > 0) {
         window.open(github, '_blank');
       }
 
       return github;
     }
 
-    return `CMD not recognized: ${cmd}`
+    return 'Unknown cmd: '+cmd;
   };
 
   const handleInput = (e) => {
@@ -119,6 +118,7 @@ function CLI(props) {
         copy.push(parseCmd(cmd, copy));
   
         setHistory(copy.reverse().slice(0, 2).reverse());
+        setHistoryCursor(undefined);
         setCmd('');
         e.target.value = '';
         break;
@@ -147,8 +147,8 @@ function CLI(props) {
 
         break;
 
-      // default:
-      //   console.log('# unrecognized keycode:', e.keyCode);
+      default:
+        // console.log('# unrecognized keycode:', e.keyCode);
     }
   };
 

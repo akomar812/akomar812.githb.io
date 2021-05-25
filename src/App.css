@@ -3,6 +3,10 @@
   font-size: .83em;
 }
 
+input {
+  color: initial;
+}
+
 @media screen and (min-width: 480px) {
   * {
     font-size: .89em;
@@ -19,6 +23,10 @@
   * {
     font-size: 1em;
   }
+}
+
+.hidden {
+  display: none;
 }
 
 .container {
@@ -65,109 +73,6 @@
   outline: inherit;
 }
 
-#resume-wrapper {
-  padding: .5%;
-  width: 95%;
-}
-
-#resume-header {
-  display: flex;
-  flex-direction: row;
-  height: 20em;
-  justify-content: space-between;
-}
-
-#resume-header-controls {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  padding: .5em;
-  width: 100%;
-}
-
-#resume-header-controls * {
-  font-size: 100%;
-}
-
-#email:active {
-  background-color: #80b696;
-}
-
-#resume-header-controls *:hover {
-  color: #0CE964;
-  cursor: pointer;
-}
-
-#resume-header-name {
-  font-size: 3.75em;
-}
-
-#resume-wrapper {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-}
-
-#resume-content-wrapper {
-  display: flex;
-  flex-direction: column;
-  max-width: 75%;
-  width: 75%;
-}
-
-#resume-body {
-  display: flex;
-  flex-direction: column;
-  overflow-y: scroll;
-  background-color: #122E22;
-  padding: 0 2em;
-}
-
-#resume-body > div {
-  margin: 1em 0 0;
-}
-
-#resume-skills {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
-.resume-skill {
-  border: 1px solid white;
-  border-radius: 10%;
-  margin: .25em;
-  padding: .15em .25em;
-}
-
-#resume-sidebar {
-  max-width: 75%;
-  width: 25%;
-  /* background-color: mistyrose; */
-}
-
-.resume-contact-item-header {
-  font-weight: bold;
-}
-
-.experience {
-  margin: 0 0 1em;
-}
-
-.experience .experience-title {
-  font-size: 2em;
-  font-weight: bold;
-}
-
-.experience ul {
-  padding: 0;
-}
-
-.experience ul > li{
-  list-style-type: none;
-  margin: 0 0 2em;
-}
-
-.experience ul > li:last-child{
-  margin: 0;
+#graph > canvas {
+  width: 100vw;
 }

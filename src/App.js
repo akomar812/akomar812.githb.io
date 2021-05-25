@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import CLI from './cli.js';
-import Resume from './resume.js';
 import './App.css';
 
 function App() {
@@ -13,20 +12,16 @@ function App() {
     window.history.replaceState(null, 'Main', '/');
   };
 
-  const showResume = () => {
-    setView('resume');
-    window.history.replaceState(null, 'Resume', '#resume');
-  };
+  const displayManager = {
+    showCLI
+  }
 
-  useEffect(() => window.location.hash === '#resume' ? showResume() : showCLI(), []);
+  useEffect(() => showCLI(), []);
 
   switch(view) {
     case 'cli':
-      display = <CLI showResume={showResume} history={history} setHistory={setHistory}></CLI>;
-      break;
-    case 'resume':
-      display = <Resume showCLI={showCLI}></Resume>;
-      break;     
+    default:
+      display = <CLI history={history} setHistory={setHistory} displayManager={displayManager}></CLI>;
   }
 
   return (<div className="App">{display}</div>);
