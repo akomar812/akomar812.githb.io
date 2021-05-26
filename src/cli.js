@@ -13,16 +13,13 @@ function CLI(props) {
     'help': 'Print CLI usage',
     'resume': 'Resume file download',
     'linkedin': 'LinkedIn profile '+commonFlags,
-    'github': 'Github repos '+commonFlags
+    'github': 'Github repos '+commonFlags,
+    'history': 'CMD history'
   };
 
   const focusCLIInput = () => {
     return document.getElementById('cli-input').children[1].focus();
   }
-
-  const getHistoryHTML = (h) => {
-    return <div className="cli-history-item" key={new Date().getTime()+(Math.random()*1000)}>{h}</div>;
-  };
 
   const getBanner = () => {
     const banner = [
@@ -30,7 +27,7 @@ function CLI(props) {
        ___            _                     _   __
       / _ \\          | |                   | | / /
      / /_\\ \\_ __   __| |_ __ _____      __ | |/ /  ___  _ __ ___   __ _ _ __
-     |  _  | '_ \\ / _\` | '__/ _ \\ \\ /\\ / / |    \\ / _ \\| '_ \` _ \\ / _\` | \'__|
+     |  _  | '_ \\ / _\` | '__/ _ \\ \\ /\\ / / |    \\ / _ \\| '_ \` _ \\ / _\` | '__|
      | | | | | | | (_| | | |  __/\\ V  V /  | |\\  \\ (_) | | | | | | (_| | |
      \\_| |_/_| |_|\\__,_|_|  \\___| \\_/\\_/   \\_| \\_/\\___/|_| |_| |_|\\__,_|_|
      `,
@@ -103,6 +100,11 @@ function CLI(props) {
       return github;
     }
 
+    if (cmd.indexOf('history') === 0) {
+      return props.history.filter(h => h !== '').join('\n');
+    }
+
+
     return 'Unknown cmd: '+cmd;
   };
 
@@ -169,7 +171,7 @@ function CLI(props) {
     <div className="container" onClick={focusCLIInput}>
       <div id="cli-wrapper">
         <div id="cli-history">
-          { history.map(getHistoryHTML) }
+          { history.map((h, i) => <div className="cli-history-item" key={i}>{h}</div>) }
         </div>
         <div id="cli-input">
           <span>$</span>
