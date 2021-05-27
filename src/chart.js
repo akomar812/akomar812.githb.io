@@ -120,7 +120,7 @@ export default function Chart(props) {
         onKeyUp={handleKeyup}
         tabIndex="0">
           <div className={ isLoading ? 'hidden' : '' }>{banner}</div>
-          <div style={{ textAlign: 'center', width: '100%' }}>{display}</div>
+          <div style={{ width: '100%', textAlign: (isLoading ? 'center' : '') }}>{display}</div>
       </div>
     </div>
     );
