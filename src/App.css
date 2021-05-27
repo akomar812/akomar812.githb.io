@@ -1,6 +1,7 @@
 * {
   color: white;
   font-size: .83em;
+  overflow: hidden;
 }
 
 input {
@@ -37,7 +38,6 @@ input {
   justify-content: center;
   height: 100vh;
   width: 100%;
-  overflow: hidden;
 }
 
 #cli-wrapper {
@@ -73,6 +73,26 @@ input {
   outline: inherit;
 }
 
-#graph > canvas {
-  width: 100vw;
+.cli-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.cli-chart-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cli-chart > * {
+  font-size: .75em;
+  white-space: pre-wrap;
+}
+
+#chart {
+  display: flex;
+  flex-direction: row;
 }

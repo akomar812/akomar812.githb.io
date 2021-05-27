@@ -14,8 +14,11 @@ function CLI(props) {
     'resume': 'Resume file download',
     'linkedin': 'LinkedIn profile '+commonFlags,
     'github': 'Github repos '+commonFlags,
-    'history': 'CMD history'
+    'history': 'CMD history',
+    'chart bitcoin': 'Graph live bitcoin price'
   };
+
+  let longestCmd = Object.keys(cmds).reduce((a, b) => a.length > b.length ? a : b);
 
   const focusCLIInput = () => {
     return document.getElementById('cli-input').children[1].focus();
@@ -39,18 +42,11 @@ function CLI(props) {
 
   const getHelp = () => {
     const help = [`    contact: ${email}`, `\n`,
-                  `    cmd              description`,
-                  `    ---              -----------`];
+                  `    cmd${getPadding('cmd')}description`,
+                  `    ---${getPadding('---')}-----------`];
 
     for (let key in cmds) {
-      let padding = '         ';
-
-      // 6 is the size of the largest command ("linkedin")
-      for (let i=0; i<8-key.length; i++) {
-        padding += ' ';
-      }
-
-      help.push(`    ${key}${padding}${cmds[key]}`);
+      help.push(`    ${key}${getPadding(key)}${cmds[key]}`);
     }
 
     help.push(``);
@@ -60,6 +56,16 @@ function CLI(props) {
     help.push(``);
     help.push(`\n`);
     return help.join('\n');
+  };
+
+  const getPadding = (key) => {
+    let padding = '         ';
+
+    for (let i=0; i<longestCmd.length-key.length; i++) {
+      padding += ' ';
+    }
+
+    return padding;
   };
 
   const parseCmd = (cmd) => {
@@ -104,6 +110,11 @@ function CLI(props) {
       return props.history.filter(h => h !== '').join('\n');
     }
 
+    if (cmd === 'chart bitcoin') {
+      const asset = cmd.split(' ')[1];
+      window.setTimeout(() => props.displayManager.showChart(asset), 0);
+      return '';
+    }
 
     return 'Unknown cmd: '+cmd;
   };
@@ -150,7 +161,7 @@ function CLI(props) {
         break;
 
       default:
-        // console.log('# unrecognized keycode:', e.keyCode);
+        //console.log('# unrecognized keycode:', e.keyCode);
     }
   };
 
