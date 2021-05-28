@@ -165,6 +165,9 @@ export default function Chart(props) {
 
   useEffect(() => {
     figlet.text(props.asset, { font: 'Big' }, (err, data) => setBanner(data));
+
+    document.getElementById('cli-wrapper').focus();
+
     socket = new WebSocket('wss://ws-feed.pro.coinbase.com');
 
     socket.addEventListener('open', () => {
@@ -214,7 +217,7 @@ export default function Chart(props) {
   useEffect(() => {
     console.log('# asset:', props.asset)
 
-    if (points.length > 5) {
+    if (points.length > 1) {
       setDisplay(
         <ChartView
           displayManager={props.displayManager}

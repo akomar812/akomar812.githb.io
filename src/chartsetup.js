@@ -37,13 +37,14 @@ export default function ChartSetup(props) {
   };
 
   useEffect(async () => {
+    document.getElementById('cli-view').focus();
     const raw = await fetch('https://api.pro.coinbase.com/products');
     const json = await raw.json();
     setAssets(json.sort((a, b) => a.id > b.id ? 1 : -1));
   }, []);
 
   return (
-    <div tabIndex="0" className="container" onKeyDown={handleInput}>
+    <div tabIndex="0" className="container" onKeyDown={handleInput} id="cli-view">
       <div id="cli-wrapper" className="spaced-columns">
         <div id="cli-history">
           {

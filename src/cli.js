@@ -163,6 +163,8 @@ function CLI(props) {
     }
   };
 
+  useEffect(() => focusCLIInput(), []);
+
   // initialize cli with banner
   useEffect(() => figlet.text('Andrew Komar', { font: 'Big' }, (err, data) => setBanner(data)), []);
   useEffect(() => setHistory([getBanner()]), [banner]);
