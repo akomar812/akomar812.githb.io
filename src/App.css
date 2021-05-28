@@ -26,6 +26,16 @@ input {
   }
 }
 
+.selected {
+  color: white !important;
+}
+
+.spaced-columns {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .hidden {
   display: none;
 }
@@ -131,11 +141,12 @@ input {
   color: inherit;
   height: 13vh;
   margin: 1em 0;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
   text-align: center;
 }
 
-.cli-chart-button {
+.cli-chart-control {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -143,7 +154,7 @@ input {
   padding: .25em;
 }
 
-.cli-chart-button:hover > * {
+.cli-chart-control:hover > * {
   color: white !important;
 }
 

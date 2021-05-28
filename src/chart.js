@@ -4,6 +4,83 @@ import figlet from 'figlet';
 import big from 'figlet/importable-fonts/Big';
 figlet.parseFont('Big', big);
 
+function ChartMetric(props) {
+  return (
+    <div className="cli-chart-metric">
+      <div className="cli-chart-metric-header">{props.title}:</div>
+      <div>{props.data}</div>
+    </div>
+  );
+}
+
+function ChartTransaction(props) {
+  const d = new Date(props.datetime);
+  return (
+    <div>{props.quantity}, {props.price}, {d.getMonth()+1}/{d.getDate()}/{d.getFullYear()}</div>
+  );
+}
+
+function ChartControl(props) {
+  return (
+    <div
+    tabIndex="0"
+    className={props.isLoading ? 'hidden' : 'cli-chart-control'}
+    onClick={props.onClick}>
+      <div>{props.name}</div>
+      <div> - {props.hotkey}</div>
+  </div>
+  );
+}
+
+function ChartView(props) {
+  return (
+    <div id="chart">
+    <div>{asciichart.plot(props.points, { height: props.height })}</div>
+      <div id="cli-chart-sidebar">
+        <div id="cli-chart-transactions">
+          <div>transactions</div>
+          <div id="cli-chart-transactions-wrapper">
+            {
+              props.transactions.map((t, i) => {
+                return <ChartTransaction key={i} quantity={t[0]} price={t[1]} datetime={t[2]}></ChartTransaction>;
+              })
+            }
+          </div>
+        </div>
+        <div>
+          <div style={{ textAlign: 'center' }}>controls</div>
+          <ChartControl
+            name="exit"
+            hotkey="[ctrl] + [c]"
+            onClick={props.displayManager.showCLI}
+            isLoading={props.isLoading}></ChartControl>
+          <ChartControl
+            name="buy"
+            hotkey="[ctrl] + [b]"
+            onClick={props.buy}
+            isLoading={props.isLoading}></ChartControl>
+          <ChartControl
+            name="sell"
+            hotkey="[ctrl] + [s]"
+            onClick={props.sell}
+            isLoading={props.isLoading}></ChartControl>
+          <ChartControl
+            name="[+]"
+            hotkey="[ctrl] + [+]"
+            onClick={props.zoomIn}
+            isLoading={props.isLoading}></ChartControl>
+          <ChartControl
+            name="[-]"
+            hotkey="[ctrl] + [-]"
+            onClick={props.zoomOut}
+            isLoading={props.isLoading}></ChartControl>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 export default function Chart(props) {
   const [banner, setBanner] = useState('');
   const [costBasis, setCostBasis] = useState(0);
@@ -15,7 +92,7 @@ export default function Chart(props) {
   const [quantity, setQuantity] = useState(0);
   const [transactions, setTransactions] = useState([]);
   const [total, setTotal] = useState(0);
-  const [socket, setSocket] = useState();
+  let socket;
 
   const buy = () => {
     setCostBasis(quantity + 1 === 0 ? 0 : (transactions.reduce((s, a) => s + (a[0] * a[1]), 0) + parseFloat(point.price)) / (transactions.length + 1));
@@ -31,7 +108,7 @@ export default function Chart(props) {
     setTransactions([...transactions, [-1, parseFloat(point.price), point.time]]);
   };
 
-  const zoomIn = () => height > 0 ? setHeight(height-1) : null;
+  const zoomIn = () => height > 5 ? setHeight(height-1) : null;
 
   const zoomOut = () => height < 32 ? setHeight(height+1) : null;
 
@@ -70,15 +147,13 @@ export default function Chart(props) {
 
   useEffect(() => {
     figlet.text(props.asset, { font: 'Big' }, (err, data) => setBanner(data));
- 
-    let s = new WebSocket('wss://ws-feed.pro.coinbase.com');
+    socket = new WebSocket('wss://ws-feed.pro.coinbase.com');
 
-    // Connection opened
-    s.addEventListener('open', () => {
-      s.send(JSON.stringify({
+    socket.addEventListener('open', () => {
+      socket.send(JSON.stringify({
         "type": "subscribe",
         "product_ids": [
-            "BTC-USD"
+          props.asset
         ],
         "channels": [
             "ticker"
@@ -86,12 +161,11 @@ export default function Chart(props) {
       }));
     });
 
-    s.addEventListener('subscribe', (event) => {
+    socket.addEventListener('subscribe', (event) => {
       console.log('Subscription message:', event)
     });
 
-    // Listen for messages
-    s.addEventListener('message', (event) => {
+    socket.addEventListener('message', (event) => {
       try {
         const data = JSON.parse(event.data);
 
@@ -105,8 +179,6 @@ export default function Chart(props) {
         console.log('Received unparseable raw message:', event.data);
       }
     });
-
-    setSocket(s);
   }, []);
 
   useEffect(async () => {
@@ -118,68 +190,21 @@ export default function Chart(props) {
   }, [point]);
 
   useEffect(() => {
+    console.log('# asset:', props.asset)
+
     if (points.length > 5) {
       setDisplay(
-        <div id="chart">
-          <div>{asciichart.plot(points, { height: height })}</div>
-          <div id="cli-chart-sidebar">
-            <div id="cli-chart-transactions">
-              <div>transactions</div>
-              <div id="cli-chart-transactions-wrapper">
-                {
-                  transactions.map((t, i) => {
-                    const d = new Date(t[2]);
-                    return (
-                      <div
-                        key={i}
-                        className="cli-chart-transactions">
-                          {t[0]}, {t[1]}, {d.getMonth()+1}/{d.getDate()}/{d.getFullYear()}
-                      </div>
-                    );
-                  })
-                }
-              </div>
-            </div>
-            <div>
-              <div style={{ textAlign: 'center' }}>controls</div>
-              <div
-                tabIndex="0"
-                className={isLoading ? 'hidden' : 'cli-chart-button'}
-                onClick={props.displayManager.showCLI}>
-                  <div>exit</div>
-                  <div> - [ctrl] + [c]</div>
-              </div>
-              <div
-                tabIndex="0"
-                className={isLoading ? 'hidden' : 'cli-chart-button'}
-                onClick={buy}>
-                  <div>buy</div>
-                  <div> - [ctrl] + [b]</div>
-              </div>
-              <div
-                tabIndex="0"
-                className={isLoading ? 'hidden' : 'cli-chart-button'}
-                onClick={sell}>
-                  <div>sell</div>
-                  <div> - [ctrl] + [s]</div>
-              </div>
-              <div
-                tabIndex="0"
-                className={isLoading ? 'hidden' : 'cli-chart-button'}
-                onClick={zoomIn}>
-                  <div>[+]</div>
-                  <div> - [ctrl] + [+]</div>
-              </div>
-              <div
-                tabIndex="0"
-                className={isLoading ? 'hidden' : 'cli-chart-button'}
-                onClick={zoomOut}>
-                  <div>[-]</div>
-                  <div> - [ctrl] + [-]</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ChartView
+          displayManager={props.displayManager}
+          buy={buy}
+          sell={sell}
+          zoomIn={zoomIn}
+          zoomOut={zoomOut}
+          points={points}
+          transactions={transactions}
+          height={height}
+          isLoading={isLoading}>
+        </ChartView>
       );
     } else {
       setDisplay(<div key={"loading"}>Loading...</div>);
@@ -199,30 +224,12 @@ export default function Chart(props) {
           <div className={ isLoading ? 'hidden' : 'cli-chart-header' }>
             <div id="cli-chart-banner">{banner}</div>
             <div id="cli-chart-metrics">
-              <div className="cli-chart-metric">
-                <div className="cli-chart-metric-header">Last:</div>
-                <div>{point ? point.price : ''}</div>
-              </div>
-              <div className="cli-chart-metric">
-                <div className="cli-chart-metric-header">Bid:</div>
-                <div>{point ? point.best_bid : ''}</div>
-              </div>
-              <div className="cli-chart-metric">
-                <div className="cli-chart-metric-header">Ask:</div>
-                <div>{point ? point.best_ask : ''}</div>
-              </div>
-              <div className="cli-chart-metric">
-                <div className="cli-chart-metric-header">Quantity:</div>
-                <div>{quantity}</div>
-              </div>
-              <div className="cli-chart-metric">
-                <div className="cli-chart-metric-header">Cost Basis:</div>
-                <div>{costBasis.toFixed(4)}</div>
-              </div>
-              <div className="cli-chart-metric">
-                <div className="cli-chart-metric-header">Total:</div>
-                <div>{total.toFixed(4)}</div>
-              </div>
+              <ChartMetric title="Price" data={point ? point.price : ''}></ChartMetric>
+              <ChartMetric title="Bid" data={point ? point.best_bid : ''}></ChartMetric>
+              <ChartMetric title="Ask" data={point ? point.best_ask : ''}></ChartMetric>
+              <ChartMetric title="Quantity" data={quantity}></ChartMetric>
+              <ChartMetric title="Cost Basis" data={costBasis.toFixed(4)}></ChartMetric>
+              <ChartMetric title="Total" data={total.toFixed(4)}></ChartMetric>
             </div>
           </div>
           <div style={{ width: '100%', textAlign: (isLoading ? 'center' : '') }}>{display}</div>

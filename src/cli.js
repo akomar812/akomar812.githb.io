@@ -11,15 +11,14 @@ function CLI(props) {
   const [history, setHistory] = useState([]);
   const [historyCursor, setHistoryCursor] = useState();
 
-  const commonFlags = '(-c=copy url to clipboard, -o=open url in new tab)';
-
   const cmds = {
     'help': 'Print CLI usage',
-    'resume': 'Resume file download',
-    'linkedin': 'LinkedIn profile '+commonFlags,
-    'github': 'Github repos '+commonFlags,
     'history': 'CMD history',
-    'chart bitcoin': 'Graph live bitcoin price'
+    'resume': 'Resume file download',
+    'linkedin': 'LinkedIn profile',
+    'github': 'Github repos',
+    'chart': 'Select asset to chart live',
+    'chart [asset]': 'Chart live asset price'
   };
 
   let longestCmd = Object.keys(cmds).reduce((a, b) => a.length > b.length ? a : b);
@@ -45,6 +44,8 @@ function CLI(props) {
     help.push(`    general`);
     help.push(`    -------`);
     help.push(`    enter an empty command to clear screen`);
+    help.push(`    "-c" can be used to copy links to your clipboard (when applicable)`);
+    help.push(`    "-o" can be used to open links in new tab (when applicable)`);
     help.push(``);
     help.push(`\n`);
     return help.join('\n');
@@ -102,10 +103,15 @@ function CLI(props) {
       return props.history.filter(h => h !== '').join('\n');
     }
 
-    if (cmd === 'chart bitcoin') {
+    if (cmd === 'chart') {
+      window.setTimeout(() => props.displayManager.showChartSetup(), 0);
+      return cmd;
+    }
+
+    if (cmd.indexOf('chart') === 0) {
       const asset = cmd.split(' ')[1];
-      window.setTimeout(() => props.displayManager.showChart(asset), 0);
-      return '';
+      window.setTimeout(() => asset ? props.displayManager.showChart(asset) : props.displayManager.showChartSetup(), 0);
+      return cmd;
     }
 
     return 'Unknown cmd: '+cmd;
