@@ -18,7 +18,7 @@ function CLI(props) {
     'linkedin': 'LinkedIn profile',
     'github': 'Github repos',
     'chart': 'Select asset to chart live',
-    'chart [asset]': 'Chart live asset price'
+    'chart [asset]': 'Chart live asset price (example asset: ETH-USD)'
   };
 
   let longestCmd = Object.keys(cmds).reduce((a, b) => a.length > b.length ? a : b);

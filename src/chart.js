@@ -55,6 +55,11 @@ function ChartView(props) {
             onClick={props.displayManager.showCLI}
             isLoading={props.isLoading}></ChartControl>
           <ChartControl
+            name="reselect"
+            hotkey="[ctrl] + [r]"
+            onClick={props.displayManager.showChartSetup}
+            isLoading={props.isLoading}></ChartControl>
+          <ChartControl
             name="buy"
             hotkey="[ctrl] + [b]"
             onClick={props.buy}
@@ -80,6 +85,15 @@ function ChartView(props) {
   );
 }
 
+function ChartError(props) {
+  return (
+    <div>
+      <div>Unknown asset: {props.asset} (example valid entry: BTC-USD)</div>
+      <div>exit - [ctrl] + [c]</div>
+      <div>select asset - [ctrl] + [r]</div>
+    </div>
+  )
+}
 
 export default function Chart(props) {
   const [banner, setBanner] = useState('');
@@ -118,6 +132,10 @@ export default function Chart(props) {
 
     if (kp[17] && kp[67]) {
       return props.displayManager.showCLI();
+    }
+
+    if (kp[17] && kp[82]) {
+      return props.displayManager.showChartSetup();
     }
 
     if (kp[17] && kp[66]) {
@@ -172,6 +190,10 @@ export default function Chart(props) {
         switch(data.type) {
           case 'ticker':
             return setPoint(data);
+          case 'error':
+            if (data.message === 'Failed to subscribe' && data.reason === props.asset+' is not a valid product') {
+              return setDisplay(<ChartError key="error" asset={props.asset}></ChartError>);
+            }
           default:
             console.log('Message from server ', event.data);
         }
@@ -211,7 +233,7 @@ export default function Chart(props) {
     }
   }, [points]);
 
-  const isLoading = !display || display.key === 'loading';
+  const isLoading = !display || display.key === 'loading' || display.key === 'error';
 
   return (
     <div className="container">
