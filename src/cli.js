@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import { resume, linkedin, github, email } from './constants.js';
+import figlet from 'figlet';
+import big from 'figlet/importable-fonts/Big';
 import './App.css';
+figlet.parseFont('Big', big);
 
 function CLI(props) {
+  const [banner, setBanner] = useState('');
   const [cmd, setCmd] = useState('');
   const [history, setHistory] = useState([]);
   const [historyCursor, setHistoryCursor] = useState();
@@ -25,19 +29,7 @@ function CLI(props) {
   }
 
   const getBanner = () => {
-    const banner = [
-    `
-       ___            _                     _   __
-      / _ \\          | |                   | | / /
-     / /_\\ \\_ __   __| |_ __ _____      __ | |/ /  ___  _ __ ___   __ _ _ __
-     |  _  | '_ \\ / _\` | '__/ _ \\ \\ /\\ / / |    \\ / _ \\| '_ \` _ \\ / _\` | '__|
-     | | | | | | | (_| | | |  __/\\ V  V /  | |\\  \\ (_) | | | | | | (_| | |
-     \\_| |_/_| |_|\\__,_|_|  \\___| \\_/\\_/   \\_| \\_/\\___/|_| |_| |_|\\__,_|_|
-     `,
-     getHelp()
-    ];
-
-    return banner.join('\n');
+    return [banner, getHelp()].join('\n');
   };
 
   const getHelp = () => {
@@ -166,7 +158,8 @@ function CLI(props) {
   };
 
   // initialize cli with banner
-  useEffect(() => setHistory([getBanner()]), []);
+  useEffect(() => figlet.text('Andrew Komar', { font: 'Big' }, (err, data) => setBanner(data)), []);
+  useEffect(() => setHistory([getBanner()]), [banner]);
 
   // register cmd invokations in full history
   useEffect(() => history.length > 1 ? props.setHistory([...props.history, history[0]]) : null, [history]);
