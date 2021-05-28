@@ -8,10 +8,6 @@ function App() {
   const [display, setDisplay] = useState(<div></div>);
   const [history, setHistory] = useState([]);
 
-  const getCLI = () => <CLI history={history} setHistory={setHistory} displayManager={displayManager}></CLI>;
-
-  const getChart = () => <Chart asset={view.params.asset} displayManager={displayManager}></Chart>;
-
   const showCLI = () => {
     setView({ name: 'cli', params: {} });
     window.history.replaceState(null, 'Main', '/');
@@ -32,11 +28,11 @@ function App() {
   useEffect(() => {
     switch(view.name) {
       case 'chart':
-        setDisplay(getChart());
+        setDisplay(<Chart asset={view.params.asset} displayManager={displayManager}></Chart>);
         break;
       case 'cli':
       default:
-        setDisplay(getCLI());
+        setDisplay(<CLI history={history} setHistory={setHistory} displayManager={displayManager}></CLI>);
     }
   }, [view]);
 
