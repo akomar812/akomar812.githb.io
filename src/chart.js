@@ -33,9 +33,25 @@ function ChartControl(props) {
 }
 
 function ChartView(props) {
+  const [moneyness, setMoneyness] = useState('');
+
+  useEffect(() => {
+    if (props && props.costBasis > 0) {
+      if (props.costBasis > props.point.price) {
+        setMoneyness('cli-chart-otm');
+      } else {
+        setMoneyness('cli-chart-itm');
+      }
+    } else {
+      setMoneyness('')
+    }
+  }, [props.point]);
+
+  console.log('#moneyness:', moneyness)
+
   return (
     <div id="chart">
-    <div>{asciichart.plot(props.points, { height: props.height })}</div>
+      <div className={moneyness}>{asciichart.plot(props.points, { height: props.height })}</div>
       <div id="cli-chart-sidebar">
         <div id="cli-chart-transactions">
           <div>transactions</div>
@@ -225,6 +241,8 @@ export default function Chart(props) {
           sell={sell}
           zoomIn={zoomIn}
           zoomOut={zoomOut}
+          costBasis={costBasis}
+          point={point}
           points={points}
           transactions={transactions}
           height={height}
@@ -237,7 +255,6 @@ export default function Chart(props) {
   }, [points]);
 
   const isLoading = !display || display.key === 'loading' || display.key === 'error';
-
   return (
     <div className="container">
       <div

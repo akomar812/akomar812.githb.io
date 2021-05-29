@@ -139,7 +139,7 @@ input {
 
 #cli-chart-transactions-wrapper {
   color: inherit;
-  height: 13vh;
+  height: 19vh;
   margin: 1em 0;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -161,6 +161,14 @@ input {
 .cli-chart > * {
   font-size: .75em;
   white-space: pre-wrap;
+}
+
+.cli-chart-otm {
+  color: red !important;
+}
+
+.cli-chart-itm {
+  color: #0B6E4F !important;
 }
 
 #chart {

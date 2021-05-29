@@ -110,7 +110,7 @@ function CLI(props) {
 
     if (cmd.indexOf('chart') === 0) {
       const asset = cmd.split(' ')[1];
-      window.setTimeout(() => asset ? props.displayManager.showChart(asset) : props.displayManager.showChartSetup(), 0);
+      window.setTimeout(() => asset ? props.displayManager.showChart(asset.toUpperCase()) : props.displayManager.showChartSetup(), 0);
       return cmd;
     }
 
