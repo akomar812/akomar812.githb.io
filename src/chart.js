@@ -246,6 +246,10 @@ export default function Chart(props) {
         console.log('Received unparseable raw message:', event.data);
       }
     });
+
+    return function chartDisconnect() {
+      socket.close();
+    }
   }, []);
 
   useEffect(async () => {

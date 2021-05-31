@@ -65,6 +65,15 @@ input {
   font-family: 'Courier New';
 }
 
+#cli-setup-controls {
+  display: flex;
+  flex-direction: row;
+}
+
+#cli-setup-controls * {
+  margin-right: 2.5em;
+}
+
 .cli-history-item {
   white-space: pre-wrap;
 }
