@@ -1,6 +1,7 @@
 * {
   color: white;
   font-size: .83em;
+  outline: 0;
   overflow: hidden;
 }
 
@@ -47,7 +48,7 @@ input {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  width: 100%;
+  width: 100vw;
 }
 
 #cli-wrapper {
@@ -147,6 +148,7 @@ input {
 }
 
 .cli-chart-control {
+  cursor: pointer;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

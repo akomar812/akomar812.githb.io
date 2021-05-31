@@ -47,8 +47,6 @@ function ChartView(props) {
     }
   }, [props.point]);
 
-  console.log('#moneyness:', moneyness)
-
   return (
     <div id="chart">
       <div className={moneyness}>{asciichart.plot(props.points, { height: props.height })}</div>
@@ -120,22 +118,44 @@ export default function Chart(props) {
   const [point, setPoint] = useState();
   const [points, setPoints] = useState([]);
   const [quantity, setQuantity] = useState(0);
+  const [tradeId, setTradeId] = useState(-1);
   const [transactions, setTransactions] = useState([]);
   const [total, setTotal] = useState(0);
   let socket;
 
+  const getCostBasis = (price) => {
+    const t = transactions.filter((a) => a[2] === tradeId);
+    const totalCostThisTrade = getTotal(t, price);
+    const numTrades = t.length + 1;
+    return totalCostThisTrade / numTrades;
+  };
+
+  const getTotal = (t, price) => {
+    return t.reduce((s, a) => s + a[1], 0) + price;
+  };
+
   const buy = () => {
-    setCostBasis(quantity + 1 === 0 ? 0 : (transactions.reduce((s, a) => s + (a[0] * a[1]), 0) + parseFloat(point.price)) / (transactions.length + 1));
+    if (costBasis === 0) {
+      setTradeId(tradeId+1);
+    }
+
+    const price = parseFloat(point.price);
+    setCostBasis(quantity + 1 === 0 ? 0 : getCostBasis(price));
     setQuantity(quantity+1);
-    setTotal(-1 * (transactions.reduce((s, a) => s + (a[0] * a[1]), 0) + parseFloat(point.price)));
-    setTransactions([...transactions, [1, parseFloat(point.price), point.time]]);
+    setTotal(-1 * getTotal(transactions, price));
+    setTransactions([...transactions, [1, price, point.time, tradeId]]);
   };
 
   const sell = () => {
-    setCostBasis(quantity - 1 === 0 ? 0 : (transactions.reduce((s, a) => s + (a[0] * a[1]), 0) - parseFloat(point.price)) / (transactions.length + 1));
+    if (costBasis === 0) {
+      setTradeId(tradeId+1);
+    }
+
+    const price = -1 * parseFloat(point.price);
+    setCostBasis(quantity - 1 === 0 ? 0 : getCostBasis(price));
     setQuantity(quantity-1);
-    setTotal(-1 * (transactions.reduce((s, a) => s + (a[0] * a[1]), 0) - parseFloat(point.price)));
-    setTransactions([...transactions, [-1, parseFloat(point.price), point.time]]);
+    setTotal(-1 * getTotal(transactions, price));
+    setTransactions([...transactions, [-1, price, point.time, tradeId]]);
   };
 
   const zoomIn = () => height > 5 ? setHeight(height-1) : null;
@@ -146,26 +166,32 @@ export default function Chart(props) {
     const kp = Object.assign(keyPresses);
     kp[e.keyCode] = true;
 
+    // [ctrl] + [c] - exit
     if (kp[17] && kp[67]) {
       return props.displayManager.showCLI();
     }
 
+    // [ctrl] + [r] - reselect asset to graph
     if (kp[17] && kp[82]) {
       return props.displayManager.showChartSetup();
     }
 
+    // [ctrl] + [b] - buy charted asset at current price
     if (kp[17] && kp[66]) {
       return buy();
     }
 
+    // [ctrl] + [s] - sell charted asset at current price
     if (kp[17] && kp[83]) {
       return sell();
     }
 
+    // [ctrl] + [+] - decrease the number of ticks for the y axis i.e zoom in
     if (kp[17] && kp[61]) {
       return zoomIn();
     }
 
+    // [ctrl] + [-] - increase the number of ticks for the y axis i.e zoom out
     if (kp[17] && kp[173]) {
       return zoomOut();
     }
@@ -231,9 +257,7 @@ export default function Chart(props) {
   }, [point]);
 
   useEffect(() => {
-    console.log('# asset:', props.asset)
-
-    if (points.length > 1) {
+    if (points.length > 3) {
       setDisplay(
         <ChartView
           displayManager={props.displayManager}
