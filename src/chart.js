@@ -6,7 +6,7 @@ figlet.parseFont('Big', big);
 
 function ChartMetric(props) {
   return (
-    <div className="cli-chart-metric">
+    <div className="column align-start cli-chart-metric">
       <div className="cli-chart-metric-header">{props.title}:</div>
       <div>{props.data}</div>
     </div>
@@ -45,12 +45,12 @@ function ChartView(props) {
     } else {
       setMoneyness('')
     }
-  }, [props.point]);
+  }, [props, props.costBasis, props.point]);
 
   return (
-    <div id="chart">
+    <div className="row justify-spaced">
       <div className={moneyness}>{asciichart.plot(props.points, { height: props.height })}</div>
-      <div id="cli-chart-sidebar">
+      <div className="column">
         <div id="cli-chart-transactions">
           <div>transactions</div>
           <div id="cli-chart-transactions-wrapper">
@@ -121,7 +121,6 @@ export default function Chart(props) {
   const [tradeId, setTradeId] = useState(-1);
   const [transactions, setTransactions] = useState([]);
   const [total, setTotal] = useState(0);
-  let socket;
 
   const getCostBasis = (price) => {
     const t = transactions.filter((a) => a[2] === tradeId);
@@ -210,7 +209,7 @@ export default function Chart(props) {
 
     document.getElementById('cli-wrapper').focus();
 
-    socket = new WebSocket('wss://ws-feed.pro.coinbase.com');
+    let socket = new WebSocket('wss://ws-feed.pro.coinbase.com');
 
     socket.addEventListener('open', () => {
       socket.send(JSON.stringify({
@@ -237,8 +236,10 @@ export default function Chart(props) {
             return setPoint(data);
           case 'error':
             if (data.message === 'Failed to subscribe' && data.reason === props.asset+' is not a valid product') {
-              return setDisplay(<ChartError key="error" asset={props.asset}></ChartError>);
+              setDisplay(<ChartError key="error" asset={props.asset}></ChartError>);
             }
+
+            return;
           default:
             console.log('Message from server ', event.data);
         }
@@ -252,7 +253,7 @@ export default function Chart(props) {
     }
   }, []);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (point) {
       let copy = points.length < 120 ? points.slice(0) : points.slice(1);
       copy.push(parseFloat(point.price));
@@ -278,7 +279,16 @@ export default function Chart(props) {
         </ChartView>
       );
     } else {
-      setDisplay(<div key={"loading"}>Loading...</div>);
+      setDisplay(
+        <div key={"loading"}>
+          <div>Loading... {props.asset}</div>
+          <div>Depending on trade volume this can take a moment</div>
+          <div className="row justify-center">
+            <div style={{"marginRight":"2em"}}>[ctrl] + [c] - cancel</div>
+            <div>[ctrl] + [r] - reselect</div>
+          </div>
+        </div>
+      );
     }
   }, [points]);
 
@@ -287,13 +297,13 @@ export default function Chart(props) {
     <div className="container">
       <div
         id="cli-wrapper"
-        className={"cli-chart"+(isLoading ? '-loading' : '')}
+        className={"cli-chart column justify-center align-"+(isLoading ? 'center' : 'start')}
         onKeyDown={handleKeydown}
         onKeyUp={handleKeyup}
         tabIndex="0">
-          <div className={ isLoading ? 'hidden' : 'cli-chart-header' }>
+          <div className={ isLoading ? 'hidden' : 'row justify-start' }>
             <div id="cli-chart-banner">{banner}</div>
-            <div id="cli-chart-metrics">
+            <div className="row align-center justify-center">
               <ChartMetric title="Price" data={point ? point.price : ''}></ChartMetric>
               <ChartMetric title="Bid" data={point ? point.best_bid : ''}></ChartMetric>
               <ChartMetric title="Ask" data={point ? point.best_ask : ''}></ChartMetric>

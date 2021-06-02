@@ -18,7 +18,7 @@ function CLI(props) {
     'linkedin': 'LinkedIn profile',
     'github': 'Github repos',
     'chart': 'Select asset to chart live',
-    'chart [asset]': 'Chart live asset price (example asset: ETH-USD)'
+    'chart [asset]': 'Chart live asset price (example asset: BTC-USD)'
   };
 
   let longestCmd = Object.keys(cmds).reduce((a, b) => a.length > b.length ? a : b);
@@ -26,10 +26,6 @@ function CLI(props) {
   const focusCLIInput = () => {
     return document.getElementById('cli-input').children[1].focus();
   }
-
-  const getBanner = () => {
-    return [banner, getHelp()].join('\n');
-  };
 
   const getHelp = () => {
     const help = [`    contact: ${email}`, `\n`,
@@ -167,7 +163,7 @@ function CLI(props) {
 
   // initialize cli with banner
   useEffect(() => figlet.text('Andrew Komar', { font: 'Big' }, (err, data) => setBanner(data)), []);
-  useEffect(() => setHistory([getBanner()]), [banner]);
+  useEffect(() => setHistory([[banner, getHelp()].join('\n')]), [banner]);
 
   // register cmd invokations in full history
   useEffect(() => history.length > 1 ? props.setHistory([...props.history, history[0]]) : null, [history]);
@@ -177,7 +173,7 @@ function CLI(props) {
     const value = historyCursor >= 0 ? props.history[historyCursor] : '';
     document.getElementById('cli-input').children[1].value = value;
     setCmd(value);
-  }, [historyCursor]);
+  }, [historyCursor, props.history]);
 
   return (
     <div className="container" onClick={focusCLIInput}>
@@ -185,7 +181,7 @@ function CLI(props) {
         <div id="cli-history">
           { history.map((h, i) => <div className="cli-history-item" key={i}>{h}</div>) }
         </div>
-        <div id="cli-input">
+        <div id="cli-input" className="row">
           <span>$</span>
           <input type="text" onKeyDown={handleInput} onChange={(e) => setCmd(e.target.value)}/>
         </div>

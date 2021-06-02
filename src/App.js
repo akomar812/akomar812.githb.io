@@ -24,15 +24,15 @@ function App() {
     window.history.replaceState(null, 'Chart', '/#chartsetup');
   };
 
-  const displayManager = {
-    showCLI,
-    showChart,
-    showChartSetup
-  };
-
   useEffect(() => showCLI(), []);
 
   useEffect(() => {
+    const displayManager = {
+      showCLI,
+      showChart,
+      showChartSetup
+    };
+
     switch(view.name) {
       case 'chartsetup':
         setDisplay(<ChartSetup displayManager={displayManager}></ChartSetup>);
@@ -44,7 +44,7 @@ function App() {
       default:
         setDisplay(<CLI history={history} setHistory={setHistory} displayManager={displayManager}></CLI>);
     }
-  }, [view]);
+  }, [view, history]);
 
   return (<div className="App">{display}</div>);
 }
