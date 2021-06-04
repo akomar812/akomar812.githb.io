@@ -27,26 +27,6 @@ function CLI(props) {
     return document.getElementById('cli-input').children[1].focus();
   }
 
-  const getHelp = () => {
-    const help = [`    contact: ${email}`, `\n`,
-                  `    cmd${getPadding('cmd')}description`,
-                  `    ---${getPadding('---')}-----------`];
-
-    for (let key in cmds) {
-      help.push(`    ${key}${getPadding(key)}${cmds[key]}`);
-    }
-
-    help.push(``);
-    help.push(`    general`);
-    help.push(`    -------`);
-    help.push(`    enter an empty command to clear screen`);
-    help.push(`    "-c" can be used to copy links to your clipboard (when applicable)`);
-    help.push(`    "-o" can be used to open links in new tab (when applicable)`);
-    help.push(``);
-    help.push(`\n`);
-    return help.join('\n');
-  };
-
   const getPadding = (key) => {
     let padding = '         ';
 
@@ -63,7 +43,7 @@ function CLI(props) {
     }
 
     if (cmd.indexOf('help') >= 0) {
-      return getHelp();
+      return help;
     }
 
     if (cmd.indexOf('resume') === 0) {
@@ -126,6 +106,7 @@ function CLI(props) {
   
         setHistory(copy.reverse().slice(0, 2).reverse());
         setHistoryCursor(undefined);
+        props.setHistory([...props.history, cmd]);
         setCmd('');
         e.target.value = '';
         break;
@@ -159,14 +140,33 @@ function CLI(props) {
     }
   };
 
+  const helpConf = [
+    `    contact: ${email}`, `\n`,
+    `    Try typing and entering one of the following commands.`,
+    `    If you get lost, use "help" to bring the set of commands back`,  `\n`,
+    `    cmd${getPadding('cmd')}description`,
+    `    ---${getPadding('---')}-----------`
+  ];
+
+  for (let key in cmds) {
+    helpConf.push(`    ${key}${getPadding(key)}${cmds[key]}`);
+  }
+
+  helpConf.push(``);
+  helpConf.push(`    general`);
+  helpConf.push(`    -------`);
+  helpConf.push(`    enter an empty command to clear screen`);
+  helpConf.push(`    "-c" can be used to copy links to your clipboard (when applicable)`);
+  helpConf.push(`    "-o" can be used to open links in new tab (when applicable)`);
+  helpConf.push(``);
+  helpConf.push(`\n`);
+  const help = helpConf.join('\n');
+
   useEffect(() => focusCLIInput(), []);
 
   // initialize cli with banner
   useEffect(() => figlet.text('Andrew Komar', { font: 'Big' }, (err, data) => setBanner(data)), []);
-  useEffect(() => setHistory([[banner, getHelp()].join('\n')]), [banner]);
-
-  // register cmd invokations in full history
-  useEffect(() => history.length > 1 ? props.setHistory([...props.history, history[0]]) : null, [history]);
+  useEffect(() => setHistory([[banner, help].join('\n')]), [banner, help]);
 
   // scroll through history with up/down arrow
   useEffect(() => {

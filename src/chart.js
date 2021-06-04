@@ -114,6 +114,7 @@ export default function Chart(props) {
   const [costBasis, setCostBasis] = useState(0);
   const [display, setDisplay] = useState();
   const [height, setHeight] = useState(32);
+  const [loadState, setLoadState] = useState('connecting');
   const [keyPresses, setKeyPresses] = useState({});
   const [point, setPoint] = useState();
   const [points, setPoints] = useState([]);
@@ -232,6 +233,8 @@ export default function Chart(props) {
         const data = JSON.parse(event.data);
 
         switch(data.type) {
+          case 'subscriptions':
+            return setLoadState('Waiting for data');
           case 'ticker':
             return setPoint(data);
           case 'error':
@@ -281,7 +284,7 @@ export default function Chart(props) {
     } else {
       setDisplay(
         <div key={"loading"}>
-          <div>Loading... {props.asset}</div>
+          <div>Loading... {props.asset} - {loadState}</div>
           <div>Depending on trade volume this can take a moment</div>
           <div className="row justify-center">
             <div style={{"marginRight":"2em"}}>[ctrl] + [c] - cancel</div>
@@ -290,7 +293,7 @@ export default function Chart(props) {
         </div>
       );
     }
-  }, [points]);
+  }, [points, loadState]);
 
   const isLoading = !display || display.key === 'loading' || display.key === 'error';
   return (
