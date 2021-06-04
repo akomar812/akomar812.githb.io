@@ -74,6 +74,14 @@ export default function ChartSetup(props) {
       const raw = await fetch('https://api.pro.coinbase.com/products');
       const json = await raw.json();
       const sortedAssets = json.sort((a, b) => a.id > b.id ? 1 : -1);
+
+      for (let i=0; i<sortedAssets.length; i++) {
+        if (sortedAssets[i].id === 'BTC-USD') {
+          setCursor(i);
+          break;
+        }
+      }
+
       setAssets(sortedAssets);
       setDisplayAssets(sortedAssets);
     }

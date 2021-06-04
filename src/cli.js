@@ -12,13 +12,12 @@ function CLI(props) {
   const [historyCursor, setHistoryCursor] = useState();
 
   const cmds = {
-    'help': 'Print CLI usage',
-    'history': 'CMD history',
     'resume': 'Resume file download',
     'linkedin': 'LinkedIn profile',
     'github': 'Github repos',
     'chart': 'Select asset to chart live',
-    'chart [asset]': 'Chart live asset price (example asset: BTC-USD)'
+    'chart [asset]': 'Chart live asset price (example asset: BTC-USD)',
+    'help': 'Print CLI usage'
   };
 
   let longestCmd = Object.keys(cmds).reduce((a, b) => a.length > b.length ? a : b);
